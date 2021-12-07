@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:quran_app/services/quran_api.dart';
+import 'package:quran_app/models/surah.dart';
+import 'package:quran_app/services/quran_service.dart';
 import 'package:quran_app/utils/constant_manager.dart';
 import 'package:quran_app/utils/size_config.dart';
 import 'package:quran_app/widgets/circular_loader.dart';
@@ -13,8 +16,7 @@ class QuranScreen extends StatefulWidget {
 }
 
 class _QuranScreenState extends State<QuranScreen> {
-
-  List surahs = [];
+  List quran = [];
   bool _loading = true;
 
   @override
@@ -24,14 +26,12 @@ class _QuranScreenState extends State<QuranScreen> {
   }
 
   readData() async {
-    final response = await QuranApi.fetchChapters();
-
+    var jsonData = json.decode(await QuranServices().getQuranJson());
     setState(() {
-      surahs = response['chapters'];
+      quran = jsonData;
       _loading = false;
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +46,7 @@ class _QuranScreenState extends State<QuranScreen> {
   Widget surahListView() {
     return ListView.separated(
       padding: EdgeInsets.symmetric(vertical: SizeConfig.blockSizeVertical!),
-      itemCount: surahs.length,
+      itemCount: quran.length,
       separatorBuilder: (_, i) {
         return Container(
             padding: EdgeInsets.symmetric(
@@ -54,14 +54,9 @@ class _QuranScreenState extends State<QuranScreen> {
             child: Divider(thickness: 1.5));
       },
       itemBuilder: (ctx, i) {
-        return SurahItem(
-          id: surahs[i]['id'],
-          name: surahs[i]['name_complex'],
-          simpleName:  surahs[i]['name_simple'],
-          arabicName: surahs[i]['name_arabic'],
-          verses: surahs[i]['verses_count'],
-          translatedName:  surahs[i]['translated_name']['name'],
-        );
+        Surah surah = Surah().fromMap(quran[i]);
+
+        return SurahItem(surah);
       },
     );
   }

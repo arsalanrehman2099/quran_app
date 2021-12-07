@@ -6,32 +6,16 @@ class ConstantManager {
   static const PRIMARY_COLOR = Colors.black;
   static const SECONDARY_COLOR = Colors.white;
 
-  static const APP_NAME = "Masmoo Atul Quran";
+  static const APP_NAME = "قرآن مجید";
 
-  static var ktextStyle = GoogleFonts.montserrat();
-  static var htextStyle = GoogleFonts.fredokaOne();
+  static var ffEnglish = GoogleFonts.montserrat();
+  static var ffHeader = GoogleFonts.fredokaOne();
 
   static const URDU_FONT_FAMILY = 'Jameel Noori Nastaleeq';
-  static var utextStyle = TextStyle(fontFamily: URDU_FONT_FAMILY);
+  static var ffUrdu = TextStyle(fontFamily: URDU_FONT_FAMILY);
 
-
-  static showtoast(msg) {
-    Fluttertoast.showToast(
-      msg: msg,
-      backgroundColor: Colors.white,
-      textColor: Colors.grey.shade900,
-    );
-  }
-
-  static snackBar(String? message, context, {duration=3}) {
-    return ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message!),
-        duration: Duration(seconds: duration),
-      ),
-    );
-  }
-
+  static const ARABIC_FONT_FAMILY = 'MUHAMMADI QURANIC';
+  static var ffArabic = TextStyle(fontFamily: ARABIC_FONT_FAMILY);
 
 
   // default app bar
@@ -40,7 +24,7 @@ class ConstantManager {
       backgroundColor: Colors.white,
       title: Text(
         text,
-        style: htextStyle.copyWith(color: PRIMARY_COLOR),
+        style: ffHeader.copyWith(color: PRIMARY_COLOR),
       ),
       centerTitle: true,
       iconTheme: IconThemeData(color: ConstantManager.PRIMARY_COLOR),

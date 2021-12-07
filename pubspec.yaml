@@ -15,21 +15,31 @@ dependencies:
   cupertino_icons: ^1.0.2
   google_fonts:
   fluttertoast:
-  package_info:
   get:
-  loading_overlay:
-  http:
+  flutter_launcher_icons:
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/app_icon.png"
+
 flutter:
 
   uses-material-design: true
+
+  assets:
+    - assets/files/quran.json
+    - assets/images/
 
 
   fonts:
     - family: Jameel Noori Nastaleeq
       fonts:
-        - asset: fonts/Jameel Noori Nastaleeq Regular.ttf
+        - asset: assets/fonts/Jameel Noori Nastaleeq Regular.ttf
+    - family: MUHAMMADI QURANIC
+      fonts:
+        - asset: assets/fonts/MUHAMMADI QURANIC FONT.ttf

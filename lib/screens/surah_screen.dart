@@ -1,94 +1,80 @@
 import 'package:flutter/material.dart';
-import 'package:quran_app/services/quran_api.dart';
+import 'package:quran_app/models/surah.dart';
 import 'package:quran_app/utils/constant_manager.dart';
 import 'package:quran_app/utils/size_config.dart';
-import 'package:quran_app/widgets/circular_loader.dart';
 
-class SurahScreen extends StatefulWidget {
+class SurahScreen extends StatelessWidget {
+  final Surah _surah;
 
-  int id;
-  String name;
-
-  SurahScreen(this.id, this.name);
-
-  @override
-  _SurahScreenState createState() => _SurahScreenState();
-}
-
-class _SurahScreenState extends State<SurahScreen> {
-
-  var verses = [];
-  bool _loading = true;
-
-  @override
-  void initState() {
-    super.initState();
-    fetchSurah();
-  }
-
-  fetchSurah() async{
-    final response = await QuranApi.fetchSurah(widget.id);
-
-    setState(() {
-      verses = response['data']['verses'];
-      _loading = false;
-    });
-  }
+  SurahScreen(this._surah);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: ConstantManager.kAppbar("Surah ${widget.name}"),
-      body: _loading ? CircularLoader() :  ListView.separated(
-        padding: EdgeInsets.symmetric(
-            horizontal: SizeConfig.blockSizeHorizontal! * 5.0,
-            vertical: SizeConfig.blockSizeVertical! * 2.0),
-        itemCount: verses.length,
-        separatorBuilder: (_, i) => Padding(
+        appBar: kAppbar(" سورة${_surah.name}"),
+        body: ListView.separated(
           padding: EdgeInsets.symmetric(
+              horizontal: SizeConfig.blockSizeHorizontal! * 5.0,
               vertical: SizeConfig.blockSizeVertical! * 2.0),
-          child: Divider(
-            thickness: 1.5,
+          itemCount: _surah.verses?.length ?? 0,
+          separatorBuilder: (_, i) => Padding(
+            padding: EdgeInsets.symmetric(
+                vertical: SizeConfig.blockSizeVertical! * 2.0),
+            child: Divider(
+              thickness: 1.5,
+            ),
           ),
-        ),
-        itemBuilder: (ctx, i) {
-          return Container(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CircleAvatar(
-                  backgroundColor: Colors.white,
-                  radius: 16.0,
-                  child: Text(
-                    verses[i]['number']['inSurah'].toString(),
-                    style: ConstantManager.ktextStyle.copyWith(color: ConstantManager.PRIMARY_COLOR),
-                  ),
-                ),
-                SizedBox(height: SizeConfig.blockSizeVertical! * 1.5),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Text(
-                    verses[i]['text']['arab'],
-                    textAlign: TextAlign.right,
-                    style: ConstantManager.utextStyle.copyWith(
-                      color: ConstantManager.PRIMARY_COLOR,
-                      fontSize: SizeConfig.blockSizeHorizontal! * 8.0,
+          itemBuilder: (ctx, i) {
+            var verse = _surah.verses?[i];
+
+            return Container(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CircleAvatar(
+                    backgroundColor: Colors.white,
+                    radius: 16.0,
+                    child: Text(
+                      verse['id'].toString(),
+                      style: ConstantManager.ffEnglish
+                          .copyWith(color: ConstantManager.PRIMARY_COLOR),
                     ),
                   ),
-                ),
-                SizedBox(height: SizeConfig.blockSizeVertical! * 1.5),
-                Text(
-                  verses[i]['translation']['en'],
-                  textAlign: TextAlign.left,
-                  style: ConstantManager.ktextStyle.copyWith(
-                      color: ConstantManager.PRIMARY_COLOR,
-                      fontSize: SizeConfig.blockSizeHorizontal! * 4.0),
-                ),
-              ],
-            ),
-          );
-        },
-      )
+                  SizedBox(height: SizeConfig.blockSizeVertical! * 1.5),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Container(
+                      margin: const EdgeInsets.only(left: 20.0),
+                      child: Text(
+                        verse['text'],
+                        textAlign: TextAlign.right,
+                        style: ConstantManager.ffArabic.copyWith(
+                          color: ConstantManager.PRIMARY_COLOR,
+                          fontSize: SizeConfig.blockSizeHorizontal! * 8.5,
+                          fontWeight: FontWeight.w200,
+                          letterSpacing: 1.0,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        ));
+  }
+
+  // default app bar
+  kAppbar(text) {
+    return AppBar(
+      backgroundColor: Colors.white,
+      title: Text("سورة ${_surah.name ?? ""}",
+          style: ConstantManager.ffUrdu.copyWith(
+            fontSize: SizeConfig.blockSizeHorizontal! * 6.5,
+            color: ConstantManager.PRIMARY_COLOR,
+          )),
+      centerTitle: true,
+      iconTheme: IconThemeData(color: ConstantManager.PRIMARY_COLOR),
     );
   }
 }

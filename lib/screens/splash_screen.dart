@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:package_info/package_info.dart';
 import 'package:quran_app/screens/quran_screen.dart';
 import 'package:quran_app/utils/constant_manager.dart';
 import 'package:quran_app/utils/size_config.dart';
@@ -15,15 +14,13 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  String version = "";
 
   @override
   void initState() {
     super.initState();
 
-    _getVersionNumber();
 
-    Timer(Duration(seconds: 2), () => Get.off(QuranScreen()));
+    Timer(Duration(seconds: 2), () => Get.off(() => QuranScreen()));
   }
 
   @override
@@ -37,24 +34,23 @@ class _SplashScreenState extends State<SplashScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Spacer(),
               Text(
                 ConstantManager.APP_NAME,
                 textAlign: TextAlign.center,
-                style: ConstantManager.htextStyle.copyWith(
+                style: ConstantManager.ffUrdu.copyWith(
                   color: ConstantManager.SECONDARY_COLOR,
                   fontSize: SizeConfig.blockSizeHorizontal! * 16.0,
                 ),
               ),
-              Spacer(),
+              SizedBox(height: SizeConfig.blockSizeVertical! * 2.0),
               Text(
-                'Version ${version.toString()}',
-                style: ConstantManager.ktextStyle.copyWith(
-                  letterSpacing: 1.0,
-                  color: Colors.white,
+                'آپکا نام',
+                textAlign: TextAlign.center,
+                style: ConstantManager.ffUrdu.copyWith(
+                  color: ConstantManager.SECONDARY_COLOR,
+                  fontSize: SizeConfig.blockSizeHorizontal! * 10.0,
                 ),
               ),
-              SizedBox(height: SizeConfig.blockSizeVertical),
             ],
           ),
         ),
@@ -62,9 +58,4 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 
-  _getVersionNumber() async {
-    PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
-      setState(() => version = packageInfo.version);
-    });
-  }
 }
